@@ -20,7 +20,8 @@ def parse_path(relpath):
     if os.path.isdir(fullpath):
         msg +='<br>'.join([linkify(relpath, f) for f in os.listdir(fullpath)])
     elif os.path.isfile(fullpath):
-        msg += fullpath + " is a file!"
+        with open(fullpath, 'r') as f:
+            msg += "<pre><code>" + f.read() + "</code></pre>"
     else:
         msg += fullpath + " not found!"
     return msg
