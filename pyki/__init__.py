@@ -2,7 +2,7 @@
 #!/usr/bin/python
 
 from flask import Flask
-import os
+import os, cgi
 
 app = Flask(__name__)
 #here = os.path.abspath(os.path.dirname(__file__))
@@ -21,9 +21,7 @@ def parse_path(relpath):
         msg +='<br>'.join([linkify(relpath, f) for f in os.listdir(fullpath)])
     elif os.path.isfile(fullpath):
         with open(fullpath, 'r') as f:
-            text = f.read()
-            for org, rep in {'"': '&quot;', '<': '&lt;', '>': '&gt;', '&': '&amp;'}.items():
-                text = text.replace(org, rep)
+            text = cgi.escape(f.read(), quote=True)
             msg += '<textarea cols=80 rows=50>' + text + '</textarea>'
     else:
         msg += fullpath + " not found!"
