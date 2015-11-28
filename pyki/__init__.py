@@ -21,7 +21,10 @@ def parse_path(relpath):
         msg +='<br>'.join([linkify(relpath, f) for f in os.listdir(fullpath)])
     elif os.path.isfile(fullpath):
         with open(fullpath, 'r') as f:
-            msg += "<pre><code>" + f.read() + "</code></pre>"
+            text = f.read()
+            for org, rep in {'"': '&quot;', '<': '&lt;', '>': '&gt;', '&': '&amp;'}.items():
+                text = text.replace(org, rep)
+            msg += '<textarea cols=80 rows=50>' + text + '</textarea>'
     else:
         msg += fullpath + " not found!"
     return msg
